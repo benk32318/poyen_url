@@ -2,13 +2,32 @@
 <html>
 <head>
     <title>短網址服務</title>
+    <script>
+        function generateShortUrl() {
+            var longUrl = document.getElementById('long_url').value;
+            var shortUrl = btoa(longUrl).substring(0, 10);
+            sessionStorage.setItem(shortUrl, longUrl);
+            var result = document.getElementById('result');
+            result.innerHTML = '短網址已生成: <a href="' + shortUrl + '" onclick="redirectUrl(event)">' + shortUrl + '</a>';
+        }
+
+        function redirectUrl(event) {
+            event.preventDefault();
+            var shortUrl = event.target.getAttribute('href');
+            var longUrl = sessionStorage.getItem(shortUrl);
+            if (longUrl) {
+                window.location.href = longUrl;
+            } else {
+                alert('URL not found');
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>短網址服務</h1>
-    <form method="post">
-        <label for="long_url">請輸入長網址：</label><br>
-        <input type="text" id="long_url" name="long_url"><br>
-        <input type="submit" value="生成短網址">
-    </form>
+    <label for="long_url">請輸入長網址：</label><br>
+    <input type="text" id="long_url" name="long_url"><br>
+    <button onclick="generateShortUrl()">生成短網址</button>
+    <p id="result"></p>
 </body>
 </html>
